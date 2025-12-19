@@ -1,41 +1,89 @@
 const { response, request } = require('express');
+const Usuario = require('../models/usuario');
+const bcryptjs = require('bcryptjs');
+const usuario = require('../models/usuario');
 
-const getUser = (req = request, res = response) => {
-    const { q, nombre = 'No name', apikey, page = 1, limit = 10 } = req.query;
+const getUser = async (req = request, res = response) => {
+    const {limite = 5, desde = 0, activo = null} = req.query;   
+    const query = (activo === 'true')  ? { estado: true } : (activo === 'false') ? { estado: false } : {};  
+
+    const [ totalRegsBD, usuarios ] = await Promise.all([
+        Usuario.countDocuments( query ),
+        Usuario.find( query )
+            .skip( Number( desde ) )
+            .limit( Number( limite ) ),
+    ]); 
 
     res.json({
-        msg: 'User GET endpoint',
-        q,
-        nombre,
-        apikey,
-        page,
-        limit
+        total: usuarios.length,
+        totalRegsBD,
+        usuarios
     });
 };
 
-const createUser = (req = request, res = response) => {
-    const { nombre, edad} = req.body;
+const createUser = async(req = request, res = response) => {
+    const { nombre, email, password, rol } = req.body;
+    const usuario = new Usuario( { nombre, email, password, rol } );
+
+    //Encriptar la contraseña
+    const salt = bcryptjs.genSaltSync();
+    usuario.password = bcryptjs.hashSync(password, salt);
+
+    // guardar en la base de datos
+    await usuario.save();
 
     res.json({
-        msg: 'User POST endpoint',
-        nombre,
-        edad
+        usuario
     });
 
 };
 
-const updateUser = (req = request, res = response) => {
+const updateUser = async (req = request, res = response) => {
+    const { id } = req.params;
+    const {_id, password, google,email, ...resto } = req.body;
+
+    if ( password ) {   
+        //Encriptar la contraseña
+        const salt = bcryptjs.genSaltSync();
+        resto.password = bcryptjs.hashSync( password, salt );
+    }
+
+    const [updateUsuario, usuario] = await Promise.all([
+        Usuario.findByIdAndUpdate( id, resto ),
+        Usuario.findById( id )
+    ]);
+
+    res.json({
+        usuario
+    });
+};
+ //Borrar usuario de forma lógica
+const deleteUserLogic = async (req = request, res = response) => {
     const { id } = req.params;
 
+    const [updateUsuario, usuario] = await Promise.all([
+        Usuario.findByIdAndUpdate( id, { estado: false } ),
+        Usuario.findById( id )
+    ]);
+
     res.json({
-        msg: `User PUT endpoint for user with id: ${id}`
+        msg: `User DELETE LOGIC endpoint for user with id: ${id}`,
+        usuario
     });
 };
 
-const deleteUser = (req = request, res = response) => {
+ //Borrar usuario de forma lógica
+const deleteUser = async (req = request, res = response) => {
     const { id } = req.params;
+
+    const [deleteUsuario, usuario] = await Promise.all([
+        Usuario.findByIdAndDelete( id ),
+        Usuario.findById( id )
+    ]);
+
     res.json({
-        msg: `User DELETE endpoint for user with id: ${id}`
+        msg: `User DELETE endpoint for user with id: ${id}`,
+        usuario
     });
 };
 
@@ -50,6 +98,7 @@ module.exports = {
     getUser,
     createUser, 
     updateUser,
+    deleteUserLogic,
     deleteUser,
     patchUser
 };  
