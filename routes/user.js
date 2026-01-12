@@ -1,6 +1,12 @@
 const { Router } = require('express');
 const {check} = require('express-validator');
-const { validarCampos } = require('../middlewares/validar-campos');
+const {
+    validarCampos, 
+    validateJWT,
+    esAsdminRol,
+    tieneRol
+} = require('../middlewares');
+
 const { 
     esRolValido, 
     emailExiste,
@@ -19,9 +25,16 @@ const {
 
 const router = Router();
 
-router.get('/', getUser);
+router.get('/',[
+    validateJWT,
+    tieneRol('ADMIN_ROL', 'VENTAS_ROL'),
+    esAsdminRol
+], getUser);
 
 router.post('/', [
+    validateJWT,
+    tieneRol('ADMIN_ROL', 'VENTAS_ROL'),
+    esAsdminRol,
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('password', 'La contraseña debe de ser mas de 6 letras').isLength( { min: 6 } ),
     check('email', 'El correo no es valido').isEmail(),
@@ -31,6 +44,9 @@ router.post('/', [
 ], createUser);
 
 router.put('/:id', [
+    validateJWT,
+    tieneRol('ADMIN_ROL', 'VENTAS_ROL'),
+    esAsdminRol,
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('password', 'La contraseña debe de ser mas de 6 letras').isLength( { min: 6 } ),
     check('email', 'El correo no es valido').isEmail(),
@@ -42,6 +58,9 @@ router.put('/:id', [
 ], updateUser);
 
 router.delete('/logic/:id', [
+    validateJWT,
+    tieneRol('ADMIN_ROL', 'VENTAS_ROL'),
+    esAsdminRol,
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( idUsuarioExiste ),
     check('id').custom( usuarioInactivo ),
@@ -49,6 +68,9 @@ router.delete('/logic/:id', [
 ], deleteUserLogic);
 
 router.delete('/:id', [
+    validateJWT,
+    tieneRol('ADMIN_ROL', 'VENTAS_ROL'),
+    esAsdminRol,
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( idUsuarioExiste ),
     validarCampos

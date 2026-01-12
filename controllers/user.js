@@ -1,7 +1,6 @@
 const { response, request } = require('express');
 const Usuario = require('../models/usuario');
 const bcryptjs = require('bcryptjs');
-const usuario = require('../models/usuario');
 
 const getUser = async (req = request, res = response) => {
     const {limite = 5, desde = 0, activo = null} = req.query;   
@@ -14,7 +13,10 @@ const getUser = async (req = request, res = response) => {
             .limit( Number( limite ) ),
     ]); 
 
+    const usuarioAutenticado = req.usuario;
+
     res.json({
+        usuarioAutenticado,
         total: usuarios.length,
         totalRegsBD,
         usuarios
@@ -32,7 +34,10 @@ const createUser = async(req = request, res = response) => {
     // guardar en la base de datos
     await usuario.save();
 
+    const usuarioAutenticado = req.usuario;
+
     res.json({
+        usuarioAutenticado,
         usuario
     });
 
@@ -53,7 +58,10 @@ const updateUser = async (req = request, res = response) => {
         Usuario.findById( id )
     ]);
 
+    const usuarioAutenticado = req.usuario;
+
     res.json({
+        usuarioAutenticado,
         usuario
     });
 };
@@ -66,7 +74,10 @@ const deleteUserLogic = async (req = request, res = response) => {
         Usuario.findById( id )
     ]);
 
+    const usuarioAutenticado = req.usuario;
+
     res.json({
+        usuarioAutenticado,
         msg: `User DELETE LOGIC endpoint for user with id: ${id}`,
         usuario
     });
@@ -81,7 +92,10 @@ const deleteUser = async (req = request, res = response) => {
         Usuario.findById( id )
     ]);
 
+    const usuarioAutenticado = req.usuario;
+
     res.json({
+        usuarioAutenticado,
         msg: `User DELETE endpoint for user with id: ${id}`,
         usuario
     });
