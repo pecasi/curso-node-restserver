@@ -12,7 +12,8 @@
     <div id="g_id_onload"
         data-client_id="783814203872-gao2vsdt4qcn4n4mbl4e56qg94s7ea3o.apps.googleusercontent.com"
         data-auto_prompt="false"
-        data-callback="handleCredewntialResponse">
+        data-callback="handleCredewntialResponse"
+        data-auto_select="true">
     </div>
     <div class="g_id_signin"
         data-type="standard"
@@ -27,6 +28,8 @@
         Sign out
     </button>
 
+    <hr>
+      <h1>One Tap</h1>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
@@ -35,7 +38,13 @@
             // Google JWT ID token: ID_TOKEN
             const body = { id_token: response.credential };
 
-            fetch('http://localhost:8080/api/auth/google', {
+            let url = (window.location.hostname.includes('localhost'))
+                ? 'http://localhost:8080/api/auth/google'
+                : (window.location.hostname.includes('https://curso-node-restserver-production-2698.up.railway.app'))
+                    ? 'https://curso-node-restserver-production-2698.up.railway.app/api/auth/google'
+                    : 'https://restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com/api/auth/google';
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
