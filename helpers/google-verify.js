@@ -1,9 +1,7 @@
 const { OAuth2Client } = require('google-auth-library');
-console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID);
-
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-async function googleVerify(token = '') 
+const googleVerify = async (token = '') =>
 {
     console.log('Verifying token:', token);
     console.log('Using GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID);
