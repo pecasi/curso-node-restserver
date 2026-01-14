@@ -35,12 +35,15 @@ class Server {
     }
 
     routes() {
+        // CORS
+        this.app.use( cors() );
+
         this.app.use(this.authPath, require('../routes/auth'));
         this.app.use(this.userPath, require('../routes/user'));
     }           
 
     listen() {
-        // // CORS
+        // CORS
         this.app.use( cors() );
 
         this.app.listen(this.port, () => {
