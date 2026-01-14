@@ -65,7 +65,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'host': window.location.hostname
+                    'Host': 'https://*.airtableblocks.com'
                 },
                 body: JSON.stringify(body)
             })  .then( resp => resp.json() )
