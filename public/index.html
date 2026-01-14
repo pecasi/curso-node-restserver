@@ -58,11 +58,14 @@
             const body = { id_token: response.credential };
 
             console.log(url);
+            console.log(window.location.hostname);
 
             fetch(url, {
+                mode: 'cors',
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'host': window.location.hostname
                 },
                 body: JSON.stringify(body)
             })  .then( resp => resp.json() )
