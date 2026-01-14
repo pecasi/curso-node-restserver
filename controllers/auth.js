@@ -49,10 +49,8 @@ const login = async(req = request, res = response) => {
 
 const googleSignIn = async(req = request, res = response) => {
     const { id_token } = req.body;  
-    try {
-        console.log('controler id_token', id_token);        
+    try {        
         const { name, picture, email } = await googleVerify(id_token);
-        console.log(name, picture, email);
 
         //Verificar si el usuario existe
         let usuario = await Usuario.findOne( { email } );

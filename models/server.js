@@ -35,17 +35,11 @@ class Server {
     }
 
     routes() {
-        // CORS
-        this.app.use( cors() );
-
         this.app.use(this.authPath, require('../routes/auth'));
         this.app.use(this.userPath, require('../routes/user'));
     }           
 
     listen() {
-        // CORS
-        this.app.use( cors() );
-
         this.app.listen(this.port, () => {
             console.log(`Server is running on http://localhost:${this.port}`);
         });
