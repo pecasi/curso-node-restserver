@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
     <title>Google Sign-in</title>
 </head>
 <body>
@@ -38,9 +39,7 @@
         ? 'https://restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com/api/auth/google'
         : (window.location.hostname.includes('curso-node-restserver-production-2698.up.railway.app'))
         ? 'https://curso-node-restserver-production-2698.up.railway.app/api/auth/google'
-        : 'https://restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com/api/auth/google';
-        // : 'https://curso-node-restserver-production-2698.up.railway.app/api/auth/google';
-        // : 'http://localhost:8080/api/auth/google';
+        : 'http://localhost:8080/api/auth/google';
 
         console.log(url);
 
