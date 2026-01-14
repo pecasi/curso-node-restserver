@@ -12,8 +12,8 @@
 
     <div id="g_id_onload"
         data-client_id="783814203872-gao2vsdt4qcn4n4mbl4e56qg94s7ea3o.apps.googleusercontent.com"
-        data-auto_prompt="false"
         data-callback="handleCredentialResponse"
+        data-auto_prompt="false"
         data-auto_select="true">
     </div>
     <div class="g_id_signin"
@@ -56,7 +56,9 @@
             // Google JWT ID token: ID_TOKEN
             const body = { id_token: response.credential };
 
-            console.log(url);
+            // console.log(url);
+            // console.log(window.location.hostname);
+            // console.log(body);
 
             fetch(url, {
                 method: 'POST',
@@ -64,7 +66,9 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(body)
-            })  .then( resp => resp.json() )
+            })  
+            .then( resp => resp.json())
+            .catch( err => console.log('Error en la respuesta: ', err))
             .then( data => {
                 console.log(data);
                 localStorage.setItem('email', data.usuario.email );
