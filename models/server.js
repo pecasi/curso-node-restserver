@@ -40,6 +40,8 @@ class Server {
     }           
 
     listen() {
+        // // CORS
+        this.app.use( cors() );
 
         this.app.listen(this.port, () => {
             console.log(`Server is running on http://localhost:${this.port}`);
