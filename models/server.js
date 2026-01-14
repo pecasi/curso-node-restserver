@@ -13,7 +13,7 @@ class Server {
         this.dbConnection();
 
         // Middlewares
-        this.midelwares();
+        this.middlewares();
 
         // Rutas de la aplicacion
         this.routes();
@@ -23,14 +23,14 @@ class Server {
         await dbConnection();
     }
 
-    midelwares() {
+    middlewares() {
         // CORS
         this.app.use( cors() );
 
         //Lectura y parseo del body
         this.app.use( express.json() );
         
-       // Dierctorio publico
+       // Directorio publico
          this.app.use( express.static('public') );
     }
 
@@ -40,6 +40,7 @@ class Server {
     }           
 
     listen() {
+
         this.app.listen(this.port, () => {
             console.log(`Server is running on http://localhost:${this.port}`);
         });
