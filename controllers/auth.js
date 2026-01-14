@@ -46,6 +46,7 @@ const login = async(req = request, res = response) => {
         });
     }   
 }
+
 const googleSignIn = async(req = request, res = response) => {
     const { id_token } = req.body;  
     try {
@@ -87,7 +88,8 @@ const googleSignIn = async(req = request, res = response) => {
     catch (error) {
         console.log(error);
         return res.status(400).json({
-            msg: 'Hable con el administrador - El token no se pudo verificar'
+            msg: 'Hable con el administrador - El token no se pudo verificar',
+            error: error
         });
     }   
 }       
