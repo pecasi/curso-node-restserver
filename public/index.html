@@ -44,21 +44,8 @@
         console.log(url);
 
         function handleCredentialResponse(response) {
-            const responsePayload = decodeJwtResponse(response.credential);
-
-            console.log("ID: " + responsePayload.sub);
-            console.log('Full Name: ' + responsePayload.name);
-            console.log('Given Name: ' + responsePayload.given_name);
-            console.log('Family Name: ' + responsePayload.family_name);
-            console.log("Image URL: " + responsePayload.picture);
-            console.log("Email: " + responsePayload.email);
-
             // Google JWT ID token: ID_TOKEN
             const body = { id_token: response.credential };
-
-            // console.log(url);
-            // console.log(window.location.hostname);
-            // console.log(body);
 
             fetch(url, {
                 method: 'POST',
@@ -85,16 +72,6 @@
                 location.reload();
             });
         };
-
-        const decodeJwtResponse = (token) => {
-            let base64Url = token.split('.')[1];
-            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            return JSON.parse(jsonPayload);
-        }
     </script>
 
 </body>
