@@ -36,31 +36,18 @@
 
     <script>
         const url = (window.location.hostname.includes('restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com'))
-        ? 'https://restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com/api/auth/google/'
+        ? 'https://restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com/api/auth/google'
         : (window.location.hostname.includes('curso-node-restserver-production-2698.up.railway.app'))
         ? 'https://curso-node-restserver-production-2698.up.railway.app/api/auth/google'
         : 'http://localhost:8080/api/auth/google';
 
         console.log(url);
 
-        async function handleCredentialResponse(response) {
-            const responsePayload = decodeJwtResponse(response.credential);
-
-            console.log("ID: " + responsePayload.sub);
-            console.log('Full Name: ' + responsePayload.name);
-            console.log('Given Name: ' + responsePayload.given_name);
-            console.log('Family Name: ' + responsePayload.family_name);
-            console.log("Image URL: " + responsePayload.picture);
-            console.log("Email: " + responsePayload.email);
-
+        function handleCredentialResponse(response) {
             // Google JWT ID token: ID_TOKEN
             const body = { id_token: response.credential };
 
-            // console.log(url);
-            // console.log(window.location.hostname);
-            // console.log(body);
-
-            await fetch(url, {
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -85,16 +72,6 @@
                 location.reload();
             });
         };
-
-        const decodeJwtResponse = (token) => {
-            let base64Url = token.split('.')[1];
-            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            return JSON.parse(jsonPayload);
-        }
     </script>
 
 </body>
