@@ -49,7 +49,7 @@ const login = async(req = request, res = response) => {
 
 const googleSignIn = async(req = request, res = response) => {
     const { id_token } = req.body;
-    console.log('Auth Controler: ',reg, res);  
+
     try {        
         const { name, picture, email } = await googleVerify(id_token);
 
@@ -90,8 +90,7 @@ const googleSignIn = async(req = request, res = response) => {
         return res.status(400).json({
             msg: 'Hable con el administrador - El token no se pudo verificar',
             error: error,
-            req: req,
-            res: res
+            req: req.body
         });
     }   
 }       
