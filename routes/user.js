@@ -11,7 +11,8 @@ const {
     esRolValido, 
     emailExiste,
     idUsuarioExiste,
-    usuarioInactivo
+    usuarioInactivo,
+    idUsuarioConDependencias
  } = require('../helpers/db-validators');
 
 const {
@@ -28,7 +29,7 @@ const router = Router();
 router.get('/',[
     validateJWT,
     tieneRol('ADMIN_ROL', 'VENTAS_ROL'),
-    esAsdminRol
+    esAsdminRol,
 ], getUser);
 
 router.post('/', [
@@ -73,6 +74,7 @@ router.delete('/:id', [
     esAsdminRol,
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( idUsuarioExiste ),
+    check('id').custom(id => idUsuarioConDependencias(id)),
     validarCampos
 ], deleteUser);
 

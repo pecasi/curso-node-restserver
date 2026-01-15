@@ -1,5 +1,6 @@
 const Role = require('../models/role');
-const Usuario = require('../models/usuario');
+const { Usuario, Categoria, Producto } = require('../models');
+const { isValidObjectId } = require('mongoose');
 
 const esRolValido = async( rol = '' ) => {
     const existeRol = await Role.findOne( { rol } );     
@@ -29,9 +30,42 @@ const usuarioInactivo = async( id ) => {
     }
 }
 
+const idUsuarioConDependencias = async( id ) => {
+    const existeUsuarioProducto = await Producto.findOne( { usuario: id } );  
+    const existeUsuarioCategoria = await Categoria.findOne( { usuario: id } );  
+
+    if ( existeUsuarioCategoria  ) {
+        throw new Error(`El usuario con id ${ id } tiene categorías asociadas, no se puede eliminar`);
+    }  
+
+    if ( existeUsuarioProducto  ) {
+        throw new Error(`El usuario con id ${ id } tiene productos asociados, no se puede eliminar`);
+    }
+}
+
+const idCategoriaExiste = async( id ) => {
+    if (!isValidObjectId(id)) {
+        return;
+    }
+    const existeCategoria = await Categoria.findById( id );
+    if ( !existeCategoria  ) {
+        throw new Error(`El id ${ id } no existe`);
+    }
+}
+
+const idCategoriaconDependencias = async( id ) => {
+    const existeCategoria = await Producto.findOne( { categoria: id } );    
+    if ( existeCategoria  ) {
+        throw new Error(`La categoría con id ${ id } tiene productos asociados, no se puede eliminar`);
+    }
+}
+
 module.exports = {
     esRolValido,
     emailExiste,
     idUsuarioExiste,
-    usuarioInactivo 
+    usuarioInactivo,
+    idCategoriaExiste,
+    idCategoriaconDependencias,
+    idUsuarioConDependencias 
 };
