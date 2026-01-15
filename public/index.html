@@ -60,10 +60,11 @@
             // console.log(window.location.hostname);
             // console.log(body);
 
-            await fetch(url, {
+            await remoteFetchAsync(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Host': 'https://*.airtableblocks.com',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify(body)
