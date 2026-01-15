@@ -36,14 +36,14 @@
 
     <script>
         const url = (window.location.hostname.includes('restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com'))
-        ? 'http://localhost:8080/api/auth/google' //'https://restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com/api/auth/google'
+        ? 'https://restserver-curso-node-pecasi-41e2e3d1d9e7.herokuapp.com/api/auth/google'
         : (window.location.hostname.includes('curso-node-restserver-production-2698.up.railway.app'))
         ? 'https://curso-node-restserver-production-2698.up.railway.app/api/auth/google'
         : 'http://localhost:8080/api/auth/google';
 
         console.log(url);
 
-        function handleCredentialResponse(response) {
+        async function handleCredentialResponse(response) {
             const responsePayload = decodeJwtResponse(response.credential);
 
             console.log("ID: " + responsePayload.sub);
@@ -60,7 +60,7 @@
             // console.log(window.location.hostname);
             // console.log(body);
 
-            fetch(url, {
+            await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
