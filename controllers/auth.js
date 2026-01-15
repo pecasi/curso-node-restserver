@@ -89,7 +89,9 @@ const googleSignIn = async(req = request, res = response) => {
         console.log(error);
         return res.status(400).json({
             msg: 'Hable con el administrador - El token no se pudo verificar',
-            error: error
+            error: error,
+            request: req,
+            response: res
         });
     }   
 }       
