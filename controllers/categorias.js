@@ -1,6 +1,5 @@
 const { response, request } = require('express');
 const { Categoria } = require('../models');
-const categoria = require('../models/categoria');
 
 const getCategorias = async (req = request, res = response) => {
     // Lógica para obtener categorías

@@ -5,7 +5,6 @@ const {
     validarCampos, 
     validateJWT,
     esAsdminRol,
-    tieneRol
 } = require('../middlewares');
 
 const { 
