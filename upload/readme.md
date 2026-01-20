@@ -1,1 +1,1 @@
-# Carpet de subida de documentos
+# Carpeta de subida de documentos
