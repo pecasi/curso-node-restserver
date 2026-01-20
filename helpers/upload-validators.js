@@ -1,7 +1,7 @@
 const path = require('path');
 
-const getUpaloadPath = ( fileName ) => {
-    return path.join(__dirname, '../upload/', fileName);
+const getUpaloadPath = ( fileName, carpeta = '' ) => {
+    return path.join(__dirname, '../upload/', carpeta, fileName);
 }
 
 const moveFile = ( fichero, destino ) => {
@@ -12,7 +12,7 @@ const moveFile = ( fichero, destino ) => {
                 reject(err);
             }
             resolve(
-                true
+                destino
             );
         });
     });
@@ -26,8 +26,16 @@ const getExtensionArchivo = ( nombreCortado ) => {
     return nombreCortado[ nombreCortado.length - 1 ]; 
 }
 
-const isExtensionValid = ( extensionArchivo, extensionesValidas ) => {
-    return extensionesValidas.includes( extensionArchivo );
+const isExtensionValid = ( extensionArchivo, extensionesValidas) => {
+    let esValida = false;
+
+    if ( Array.isArray( extensionesValidas ) ) {
+        if (extensionesValidas.includes(extensionArchivo)) {
+            esValida = true;
+        }
+    }
+
+    return esValida;
 }
 
 module.exports = {      

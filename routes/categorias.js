@@ -19,7 +19,7 @@ const {
 const { 
     idCategoriaExiste,
     idCategoriaconDependencias
- } = require('../helpers/db-validators');
+ } = require('../helpers');
 
 const router = Router();
 

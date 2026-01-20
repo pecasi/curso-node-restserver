@@ -1,24 +1,48 @@
 const { Router } = require('express');
 const { check} = require('express-validator');
- const { validarCampos, validateJWT, validateFileExtension } = require('../middlewares');
 
- const router = Router();
+const { 
+    validarCampos, 
+    esColeccionPermitida,
+    validateJWT, 
+    validateFileExtension
+} = require('../middlewares');
 
-const { cargarArchivo } = require('../controllers/uploads');
+const { 
+    cargarArchivo, 
+    updateFile 
+} = require('../controllers/uploads');
+
+const { 
+    IscoleccionesPermitida,
+    idColeccionValida
+} = require('../helpers');
+
+const router = Router();
 
 router.post('/',
 [
     validateJWT,
-    validateFileExtension
+    validateFileExtension(['png', 'jpg', 'jpeg'])
 ], 
-cargarArchivo);
+cargarArchivo('imagenes'));
 
 router.post('/multiple',
 [
     validateJWT,
-// //     upload.array('files', 10),
-    validateFileExtension
+    validateFileExtension(['png', 'jpg', 'jpeg', 'gif'])
 ], 
-cargarArchivo);
+cargarArchivo('imagenes'));
+
+router.put('/:coleccion/:id',
+[
+    validateJWT,
+    validateFileExtension(['png', 'jpg', 'jpeg', 'gif']),
+    check('id', 'El id debe ser de MongoDB').isMongoId(),
+    esColeccionPermitida(['usuarios', 'productos']),
+    check('id').custom((id, { req }) => idColeccionValida(id, req.params.coleccion, ['usuarios', 'productos']) ),
+    validarCampos
+], 
+updateFile);
 
 module.exports = router;

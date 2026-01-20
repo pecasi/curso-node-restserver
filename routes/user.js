@@ -9,11 +9,11 @@ const {
 
 const { 
     esRolValido, 
-    emailExiste,
-    idUsuarioExiste,
-    usuarioInactivo,
-    idUsuarioConDependencias
- } = require('../helpers/db-validators');
+    emailExiste, 
+    idUsuarioExiste, 
+    usuarioInactivo, 
+    idUsuarioConDependencias 
+} = require('../helpers');
 
 const {
     getUser,

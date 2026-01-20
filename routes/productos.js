@@ -16,10 +16,10 @@ const {
     deleteProducto
 } = require('../controllers/productos');
 
-const { 
+ const {     
     idProductoExiste,
-    idCategoriaExiste,
- } = require('../helpers/db-validators');
+    idCategoriaExiste  
+} = require('../helpers');
 
  const router = Router();
 

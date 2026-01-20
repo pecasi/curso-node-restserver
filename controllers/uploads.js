@@ -1,43 +1,81 @@
 const { request, response } = require('express');  
-const fs = require('fs');
-const { 
-    getUpaloadPath,
-    moveFile
-} = require(`../helpers/upload-validators`);
+const { subirArchivo } = require(`../helpers`);
+const { Usuario, Producto } = require('../models');
 
-const cargarArchivo = (req = request, res = response) => {  
+const cargarArchivo = (carpeta = '') => {
+    return async(req = request, res = response) => {  
+        if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo ) {
+            return res.status(400).json({ message: 'No files were uploaded.' });
+        } 
+
+        try {
+            const { archivo } = req.files;
+            const result = await subirArchivo( archivo, carpeta );
+
+            res.json(result);
+        }  
+        catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                msg: `Hable con el administrador - ${ error }`
+            });
+        };
+    }
+};
+
+const updateFile = async (req = request, res = response) => {
+    // Lógica para actualizar un archivo
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo ) {
-        return res.status(400).json({ message: 'No files were uploaded.' });
-    }
-
-    const { archivo } = req.files;
-
-    let mensajes = [];
-    let uploadPath;
-
-    if ( Array.isArray(archivo) ) {
-        archivo.forEach(elemento => {
-            uploadPath = getUpaloadPath( elemento.name );    
-            
-            if (moveFile( elemento, uploadPath )) {
-                mensajes.push({ message: `File uploaded to ${uploadPath}` });
-            }
-        });
-
-        res.json({ messages: mensajes });
+            return res.status(400).json({ message: 'No files were uploaded.' });
     } 
-    else {
-        uploadPath = getUpaloadPath( archivo.name );
+    
+    try {
+        const { coleccion, id } = req.params;
+        const { archivo } = req.files;
 
-        if (moveFile( archivo, uploadPath )) {
-            res.json({ message: `File uploaded to ${uploadPath}` });
+        let modelo;
+        switch (coleccion) {
+            case 'usuarios':
+                modelo =  await Usuario.findById( id );
+
+                if ( !modelo ) {
+                    return res.status(400).json({
+                        msg: `No existe un usuario con el id ${ id }`
+                    });
+                }   
+
+                break;
+            case 'productos':
+                modelo = await Producto.findById( id );
+
+                if ( !modelo ) {
+                    return res.status(400).json({
+                        msg: `No existe un producto con el id ${ id }`
+                    });
+                }   
+
+                break;
+            default:
+                return res.status(500).json({ msg: 'Se me olvidó validar esto' });
         }
+
+        const result = await subirArchivo( archivo, coleccion );
+
+        modelo.img = result.nombre;
+        await modelo.save();
+
+        res.json({id, coleccion, result});
+    }  
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            msg: `Hable con el administrador - ${ error }`
+        });
     }
+
 };
 
 module.exports = {      
-    cargarArchivo
+    cargarArchivo,
+    updateFile  
 };
-
-
-
