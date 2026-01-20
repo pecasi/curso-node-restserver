@@ -1,4 +1,10 @@
 node_modules/
 .env
 .vs
-upload/*
+upload/**/*.png
+upload/**/*.jpg
+upload/**/*.jpeg
+upload/**/*.gif
+upload/**/*.pdf
+upload/**/*.svg
+.DS_Store
