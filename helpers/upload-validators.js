@@ -1,21 +1,18 @@
+const { cp } = require('fs');
 const path = require('path');
 
-const getUpaloadPath = ( fileName, carpeta = '' ) => {
-    return path.join(__dirname, '../upload/', carpeta, fileName);
+const getUploadPath = ( fileName, rutaOrigen = '' ,carpeta = '' ) => {
+    return path.join(__dirname, rutaOrigen, carpeta, fileName);
 }
 
 const moveFile = ( fichero, destino ) => {
-    return new Promise( (resolve, reject) => {
-        fichero.mv( destino, (err) => { 
-            if (err) {
-                console.log(err);
-                reject(err);
-            }
-            resolve(
-                destino
-            );
-        });
-    });
+    try {
+        fichero.mv( destino );
+        return true;
+    }
+    catch (error) {
+        throw new Error( error );
+    }
 }
 
 const getNombreCortado = ( fileName ) => {
@@ -38,10 +35,26 @@ const isExtensionValid = ( extensionArchivo, extensionesValidas) => {
     return esValida;
 }
 
+const isArrayFileParameter = ( obj, checkArray = true ) => {  
+    if ( checkArray ) {
+        if (!Array.isArray( obj )){
+            throw new Error('The file parameter must be an array');
+        }
+    }
+    else {
+        if (Array.isArray( obj )) {
+            throw new Error('The file parameter must not be an array');
+        }
+    }
+
+    return true
+};
+
 module.exports = {      
-    getUpaloadPath,
+    getUploadPath,
     moveFile,
     getNombreCortado,
     getExtensionArchivo,
-    isExtensionValid    
+    isArrayFileParameter,
+    isExtensionValid,
 };

@@ -5,11 +5,15 @@ const {
     isExtensionValid 
 } = require('../helpers');
 
+const isExistsFiletoUpload = (req=request, res=response, next) => {
+    if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo ) {
+        return res.status(400).json({ message: 'No files were uploaded.' });
+    } 
+    next();
+};
+
 const validateFileExtension = (extensionesValidas = [ 'png', 'jpg', 'jpeg', 'gif' ]) => {    
     return (req = request, res = response, next) => {
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({ message: 'No files were uploaded.' });
-        }
         const { archivo } = req.files;
 
         let nombreCortado;
@@ -52,5 +56,6 @@ const validateFileExtension = (extensionesValidas = [ 'png', 'jpg', 'jpeg', 'gif
 };
 
 module.exports = {
-    validateFileExtension
+    isExistsFiletoUpload,
+    validateFileExtension,
 };  

@@ -27,7 +27,7 @@ const idUsuarioExiste = async( id ) => {
 
     const existeUsuario = await Usuario.findById( id );
     if ( !existeUsuario ) {
-        throw new Error(`El id ${ id } no existe`);
+        throw new Error(`El id ${ id } no existe en la tabla de usuarios`);
     }
     return true;
 }
@@ -63,7 +63,7 @@ const idCategoriaExiste = async( id ) => {
 
     const existeCategoria = await Categoria.findById( id );
     if ( !existeCategoria  ) {
-        throw new Error(`El id ${ id } no existe`);
+        throw new Error(`El id ${ id } no existe en la tabla de categorías`);
     }
 
     return true;
@@ -96,7 +96,7 @@ const idProductoExiste = async( id ) => {
     }
     const existeProducto = await Producto.findById( id );
     if ( !existeProducto  ) {
-        throw new Error(`El id ${ id } no existe`);
+        throw new Error(`El id ${ id } no existe en la tabla de productos`);
     }
 
     return true;
