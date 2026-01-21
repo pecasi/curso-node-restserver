@@ -1,5 +1,5 @@
 const validarCampos = require('../middlewares/validar-campos');
-const validarColecciones = require('../middlewares/validar-Colecciones');
+const validarColecciones = require('../middlewares/validar-colecciones');
 const validateJWT = require('../middlewares/validar-JWT'); 
 const validateRoles = require('../middlewares/validar-roles');
 const validateFileUpload = require('../middlewares/validate-File-Upload');
